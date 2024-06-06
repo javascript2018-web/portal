@@ -29,16 +29,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Add Client
-// app.post('/api/add_client', (req, res) => {
-//     const clientData = req.body;
-//     console.log('Client Data Received:', clientData);
-//     res.send('Client added successfully!');
-// });
 
-// MongoDB Connection
-// mongoose.connect('mongodb+srv://fiverrinbox59:Ik0hwNXc06wkKeX2@portal.mou11lh.mongodb.net/?retryWrites=true&w=majority&appName=portal', { useNewUrlParser: true, useUnifiedTopology: true });
-// MongoDB Connection
 const dbURI = process.env.DATABASE_URI; 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.once('open', () => {
