@@ -9,7 +9,7 @@ const port = process.env.PORT || 5000;
 database();
 
 
-console.log('App Object:', app);  // Check what is actually imported here
+console.log('App Object:', app);  // Check what is actually imported hereddddddd
 
 if (app && typeof app.listen === 'function') {
   app.listen(port, () => {
