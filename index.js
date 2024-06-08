@@ -1,5 +1,5 @@
 // index.js
-const app = require('./app');  // Ensure the correct path and file name ddddddddddd
+const app = require('./app');  // Ensure the correct path and file name
 const database = require('./database/database');
 
 require('dotenv').config();
@@ -8,7 +8,7 @@ const port = process.env.PORT || 5000;
 database();
 
 
-console.log('App Object:', app);  
+console.log('App Object:', app);  // Check what is actually imported here
 
 if (app && typeof app.listen === 'function') {
   app.listen(port, () => {
