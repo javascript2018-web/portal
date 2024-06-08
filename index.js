@@ -1,12 +1,7 @@
 // index.js
 const app = require('./app');
-const database = require('./database/database');
-
-
 require('dotenv').config();
 const port = process.env.PORT || 5000;
-
-database();
 
 
 console.log('App Object:', app);  // Check what is actually imported heredddd
