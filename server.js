@@ -159,21 +159,21 @@ app.get('/api/allmessage', async (req, res) => {
     }
   });
 
-app.get('/api/clients', async (req, res) => {
-    try {
-      const userEmail = req.query.email; 
+// app.get('/api/clients', async (req, res) => {
+//     try {
+//       const userEmail = req.query.email; 
   
-      if (!userEmail) {
-        return res.status(400).json({ message: 'Email query parameter is required.' });
-      }
+//       if (!userEmail) {
+//         return res.status(400).json({ message: 'Email query parameter is required.' });
+//       }
   
-      const clients = await Client.find({ email: userEmail });
-      res.status(200).json(clients);
-    } catch (error) {
-      console.error('Error fetching clients:', error);
-      res.status(400).json({ message: 'Failed to fetch clients' });
-    }
-  });
+//       const clients = await Client.find({ email: userEmail });
+//       res.status(200).json(clients);
+//     } catch (error) {
+//       console.error('Error fetching clients:', error);
+//       res.status(400).json({ message: 'Failed to fetch clients' });
+//     }
+//   });
 
 // Delete client
 app.delete('/api/delete_client/:id', async (req, res) => {
