@@ -1,6 +1,7 @@
 // index.js
-const app = require('./app');  // Ensure the correct path and file name
+const app = require('./app');
 const database = require('./database/database');
+
 
 require('dotenv').config();
 const port = process.env.PORT || 5000;

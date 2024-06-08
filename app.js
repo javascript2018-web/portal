@@ -8,7 +8,8 @@ const Message = require('./modal/Message');
 const multer = require('multer');
 const app = express();
 const upload = multer({ dest: 'uploads/' });
-const port = 5000;
+const port = 5001;
+
 
 app.use(cors({
   origin: 'http://localhost:3000',
@@ -264,3 +265,6 @@ app.use("/", (req, res) => {
   app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
   });
+
+
+module.exports = app;
