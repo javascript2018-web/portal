@@ -5,9 +5,6 @@ const nodemailer = require('nodemailer');
 const twilio = require('twilio');
 require('dotenv').config();
 const mongoose = require('mongoose');
-const User = require("./modal/userModal");
-const bcrypt = require("bcrypt");
-const sendToken = require("./utilitis/sendToken");
 const Message = require('./modal/Message');
 require('dotenv').config();
 const multer = require('multer');
@@ -19,8 +16,11 @@ const port = 5000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
-
+// all router
+const userRouter = require("./router/user");
+app.use("/api/v1/user", userRouter);
 const clients = [];
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -37,11 +37,11 @@ const transporter = nodemailer.createTransport({
 });
 
 
-const dbURI = process.env.DATABASE_URI; 
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connection.once('open', () => {
-    console.log('Connected to MongoDB');
-});
+// const dbURI = process.env.DATABASE_URI; 
+// mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connection.once('open', () => {
+//     console.log('Connected to MongoDB');
+// });
 // Client Schema
 const clientSchema = new mongoose.Schema({
     name: String,
@@ -63,38 +63,38 @@ cloudinary.config({
 // module.exports = cloudinary;
 const upload = multer({ dest: 'uploads/' });
 
-app.post('/register', async (req, res) => {
-    const { fullName, email, password, userId } = req.body;
-    console.log(req.body);
+// app.post('/register', async (req, res) => {
+//     const { fullName, email, password, userId } = req.body;
+//     console.log(req.body);
   
-    try {
-      const user = await User.findOne({ email });
-      if (user) {
-        return res
-          .status(202)
-          .send({ success: false, message: "User already exists" });
-      }
+//     try {
+//       const user = await User.findOne({ email });
+//       if (user) {
+//         return res
+//           .status(202)
+//           .send({ success: false, message: "User already exists" });
+//       }
   
-      const saltRounds = 10;
-      const salt = await bcrypt.genSalt(saltRounds);
-      console.log("Generated Salt:", salt);
+//       const saltRounds = 10;
+//       const salt = await bcrypt.genSalt(saltRounds);
+//       console.log("Generated Salt:", salt);
   
-      const hashedPassword = await bcrypt.hash(`${password}`, salt);
-      console.log("Hashed Password:", hashedPassword);
+//       const hashedPassword = await bcrypt.hash(`${password}`, salt);
+//       console.log("Hashed Password:", hashedPassword);
   
-      const addedUser = await User.create({
-        fullName,
-        email,
-        password: hashedPassword,
-        userId: userId,
-      });
+//       const addedUser = await User.create({
+//         fullName,
+//         email,
+//         password: hashedPassword,
+//         userId: userId,
+//       });
   
-      sendToken(addedUser, 200, res);
-    } catch (e) {
-      console.log(e);
-      res.status(500).send({ success: false, message: "Server Error" });
-    }
-  });
+//       sendToken(addedUser, 200, res);
+//     } catch (e) {
+//       console.log(e);
+//       res.status(500).send({ success: false, message: "Server Error" });
+//     }
+//   });
   
   app.get('/singleByEmail/:email', async (req, res) => {
     console.log("Received request to fetch user by email:", req.params.email);
@@ -310,7 +310,10 @@ const client = require('twilio')(accountSid, authToken);
   }
 });
 
+app.use("/", (req, res) => {
+    res.send("hellw world");
+  });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+  app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+  });
