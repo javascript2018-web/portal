@@ -7,11 +7,13 @@ const mongoose = require('mongoose');
 const Message = require('./modal/Message');
 const multer = require('multer');
 const app = express();
-
 const upload = multer({ dest: 'uploads/' });
-
-
 const port = 5000;
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true, 
+}));
 
 // Middlewares
 app.use(cors());
