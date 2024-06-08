@@ -242,11 +242,6 @@ app.post('/api/send_email', (req, res) => {
 const client = require('twilio')(accountSid, authToken);
 
 
-const formatPhoneNumber = (phoneNumber) => {
-    if (!phoneNumber) return '';
-    return phoneNumber.replace(/[^\d+]/g, '');
-  };
-  
   const sendEmail = async (to, subject, text) => {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const email = {
@@ -260,9 +255,9 @@ const formatPhoneNumber = (phoneNumber) => {
   };
   
   const sendSms = async (to, body) => {
-    const sms = {
+    let sms = {
       from: process.env.TWILIO_PHONE_NUMBER,
-      to,
+      to: "+14324380699",
       body,
     };
     console.log('Sending SMS:', sms);
@@ -298,16 +293,6 @@ const formatPhoneNumber = (phoneNumber) => {
         console.log('File uploaded to Cloudinary:', attachmentUrl);
       }
   
-      // Format and validate phone number
-      let formattedPhoneNumber;
-      if (messageType === 'sms' || messageType === 'whatsapp') {
-        formattedPhoneNumber = formatPhoneNumber(group);
-        console.log('Formatted Phone Number:', formattedPhoneNumber);
-        if (!formattedPhoneNumber || !/^\+?[1-9]\d{1,14}$/.test(formattedPhoneNumber)) {
-          throw new Error(`Invalid phone number format: ${formattedPhoneNumber}`);
-        }
-      }
-  
       // Save the message to the database
       const newMessage = new Message({
         subject,
@@ -325,9 +310,9 @@ const formatPhoneNumber = (phoneNumber) => {
       if (messageType === 'email') {
         await sendEmail(group, subject, content);
       } else if (messageType === 'sms') {
-        await sendSms(formattedPhoneNumber, content);
+        await sendSms(subject, content);
       } else if (messageType === 'whatsapp') {
-        await sendWhatsapp(formattedPhoneNumber, content);
+        await sendWhatsapp(subject, content);
       }
     res.status(200).send('Message sent and saved successfully.');
   } catch (error) {
