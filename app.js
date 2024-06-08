@@ -2,12 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const twilio = require('twilio');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const Message = require('./modal/Message');
 require('dotenv').config();
 const multer = require('multer');
 const app = express();
+
+
 
 
 const port = 5000;
@@ -21,7 +24,10 @@ app.use(express.static("public"));
 // all router
 const userRouter = require("./router/user");
 app.use("/api/v1/user", userRouter);
-
+const clients = [];
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
 
 
 // Nodemailer Setup
@@ -40,7 +46,15 @@ const transporter = nodemailer.createTransport({
 //     console.log('Connected to MongoDB');
 // });
 // Client Schema
-
+const clientSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    phone: String,
+    country: String,
+    city: String,
+    state: String,
+    group: String,
+});
 
 // module.exports = cloudinary;
 const upload = multer({ dest: 'uploads/' });
@@ -209,6 +223,8 @@ app.post('/api/send_email', (req, res) => {
 });
 
 // ----------Communication--------------
+// Send SMS
+const client = require('twilio')(accountSid, authToken);
 
 
   const sendEmail = async (to, subject, text) => {
