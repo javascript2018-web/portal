@@ -60,7 +60,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-module.exports = cloudinary;
+// module.exports = cloudinary;
 const upload = multer({ dest: 'uploads/' });
 
 app.post('/register', async (req, res) => {
@@ -118,17 +118,6 @@ app.post('/register', async (req, res) => {
   
 
 const Client = mongoose.model('Client', clientSchema);
-// app.post('/api/add_client', async (req, res) => {
-//     const clientData = req.body;
-//     console.log(clientData)
-//     const newClient = new Client(clientData);
-//     try {
-//         await newClient.save();
-//         res.status(200).send('Client added successfully');
-//     } catch (error) {
-//         res.status(400).send('Error saving client data');
-//     }
-// });
 
 app.post('/api/add_client/:email', async (req, res) => {
     const clientData = req.body;
