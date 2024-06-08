@@ -209,8 +209,6 @@ app.post('/api/send_email', (req, res) => {
 });
 
 // ----------Communication--------------
-// Send SMS
-const client = require('twilio')(accountSid, authToken);
 
 
   const sendEmail = async (to, subject, text) => {
